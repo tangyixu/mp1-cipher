@@ -38,27 +38,41 @@ public class CipherUtils {
     return new String(arr);
   }//caesarDecrypt
 
+  /**
+   * Encrypt a string with a vigenere style.
+   * @param str
+   * @param key
+   * @return a encoded string of str.
+   */
   public static String vigenereEncrypt(String str, String key) {
     char[] arr = str.toCharArray();
-    char[] arrkey = str.toCharArray();
-    for(int n = 0; n < str.length(); n++)
-    {
-      char a = int2letter ((letter2int(arr[n]) + letter2int(arrkey[n])) % 26);
-      arr[n] = a;
-    }//for
+    char[] arrkey = key.toCharArray();
+    for(int n = 0; n < str.length(); n++) {
+      arr[n] = int2letter ((letter2int(arr[n]) 
+                           + letter2int(arrkey[n % arrkey.length])) % 26);
+    } //for
     return new String(arr);
-  }//vigenereEncrypt
+  } //vigenereEncrypt
 
+  /**
+   * Decrypt a string with a vigenere style.
+   * @param str
+   * @param key
+   * @return a decoded string of str.
+   */
   public static String vigenereDecrypt(String str, String key) {
     char[] arr = str.toCharArray();
-    char[] arrkey = str.toCharArray();
-    for(int n = 0; n < str.length(); n++)
-    {
-      char a = int2letter ((letter2int(arr[n]) - letter2int(arrkey[n])) % 26);
-      arr[n] = a;
-    }//for
+    char[] arrkey = key.toCharArray();
+    for(int n = 0; n < str.length(); n++) {
+      int index = letter2int(arr[n])
+                  - letter2int(arrkey[n % arrkey.length]);
+      if(index < 0) {
+        index += 26;
+      } //if
+      arr[n] = int2letter (index);
+    } //for
     return new String(arr);
-  }//vigenereDecrypt
+  } //vigenereDecrypt
   
   /*
    * Check if every char in an array is a lowercase, return true if it is, otherwise return false
@@ -66,15 +80,12 @@ public class CipherUtils {
    */
   public static boolean isLowerCase(char[] arr)
   {
-    for (char x : arr)
-    {
-      int val = (int) x;
-      if (val < 97 || val > 122)
+    for (char x : arr) {
+      if (!Character.isLowerCase(x))
       {
         return false;
       }//if
     }//for
     return true;
-
   }//isLowerCase
 }
